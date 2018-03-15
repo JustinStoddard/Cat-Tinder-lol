@@ -4,4 +4,12 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
   include DeviseTokenAuth::Concerns::User
+
+  serialize :liked_cats, Array
+
+  def self.random_cat(ids)
+    ids = ids.empty? ? [0] : ids
+    Cat.where("id NOT IN (?)", ids).order("RANDOM()")
+  end
+
 end
